@@ -14,15 +14,12 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-md-offset-3">
-                    <h2>CRUD APP<button type="button" class="btn btn-warning pull-right" id="add_btn" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"> Add</span></button></h2>
+                <div class="col-md-8 col-md-offset-2">
+                    <h2>CRUD APP<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#user_add_modal"><span class="glyphicon glyphicon-plus"></span> Add</button></h2>
                     
-                    <form id="crud-form">
-                        <div class="form-group">
-                            <input class="form-control" type="text" id="search_input" placeholder="search">
-                        </div>
-                        
-                    </form>
+                    <div class="form-group">
+                        <input class="form-control" type="text" id="search_input" placeholder="search">
+                    </div>
                     
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -34,54 +31,10 @@
                                 <th>action</th>
                             </tr>
                         </thead>
-                        <tbody id="tbody_id">
+                        <tbody id="user_list">
 
                         </tbody>
                     </table>
-                    <div id="myModal" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Add Data In Table :</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>id = <input type="text" id="input_id"></p>
-                                    <p>name = <input type="text" id="input_name"></p>
-                                    <p>user_name = <input type="text" id="input_user_name"></p>
-                                    <p>age = <input type="text" id="input_age"></p>
-                                    
-                
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default btn-xs" id="modal_add_btn" data-dismiss="modal">add</button>
-                                    <button class="btn btn-default btn-xs" data-dismiss="modal">cancel</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div id="myModal2" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Update The Data :</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>id = <input type="text" id="input_id_2" disabled></p>
-                                    <p>name = <input type="text" id="input_name_2"></p>
-                                    <p>user_name = <input type="text" id="input_user_name_2"></p>
-                                    <p>age = <input type="text" id="input_age_2"></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-default btn-xs" id="modal_update_btn" data-dismiss="modal">update</button>
-                                    <button class="btn btn-default btn-xs" data-dismiss="modal">cancel</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -89,6 +42,98 @@
 
         <script src="plugins/jquery/jquery.min.js"></script>        <!--added jquery file path-->
         <script src="plugins/bootstrap/js/bootstrap.min.js"></script>   <!--added bootstrap file paath-->
+        <script src="plugins/jquery-validation/dist/jquery.validate.js"></script>
         <script src="js/app.js"></script>       <!--added js path-->
     </body>
 </html>
+
+<div id="user_add_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add User</h4>
+            </div>
+            <div class="modal-body">
+                <form id="user_add_form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id">Id</label>
+                                <input type="number" class="form-control" id="add_id" name="id" required min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="add_name" name="name" required maxlength="20">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="add_username" name="username" required maxlength="20">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="age">Age</label>
+                                <input type="number" class="form-control" id="add_age" name="age" required min="0" max="100">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">cancel</button>
+                <button class="btn btn-primary" id="user_add_btn">Add User</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="user_edit_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit User</h4>
+            </div>
+            <div class="modal-body">
+                <form id="user_edit_form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id">Id</label>
+                                <input type="number" class="form-control" id="edit_id" name="id" required min="1" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="edit_name" name="name" required maxlength="20">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="edit_username" name="username" required maxlength="20">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="age">Age</label>
+                                <input type="number" class="form-control" id="edit_age" name="age" required min="0" max="100">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">cancel</button>
+                <button class="btn btn-primary" id="user_edit_btn">Update User</button>
+            </div>
+        </div>
+
+    </div>
+</div>

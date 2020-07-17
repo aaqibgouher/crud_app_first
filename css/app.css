@@ -1,4 +1,7 @@
-#add_form_name{
-    width: 100px;
-    height: 30px;
+label.error{
+    color: red !important;
+    font-size: 12px;
+}
+input.error{
+    border-color: red !important;
 }

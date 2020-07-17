@@ -1,165 +1,192 @@
 $(document).ready(function(){
     
-    // var id = 1;
-    
-
-    var crud_array = [
+    var users = [
         {
             "id" : 1,
             "name" : "Aaqib",
-            "user_name" : "aaqibgouher",
+            "username" : "aaqibgouher",
             "age" : 19
         },
         {
             "id" : 2,
             "name" : "Nazish",
-            "user_name" : "nazishfraz",
+            "username" : "nazishfraz",
             "age" : 25
         },
         {
             "id" : 3,
             "name" : "Danish",
-            "user_name" : "gouherdanish",
+            "username" : "gouherdanish",
             "age" : 29
         }
     ];
 
 
-    function crud_list(){
-        var crud_list_html = "";
+    function user_list(){
+        var user_html = "";
 
-        if(crud_array.length){
-            for(crud in crud_array){
-                crud_list_html += '<tr class="text-danger"><td id="td_id">'+crud_array[crud]["id"]+'</td><td id="td_name">'+crud_array[crud]["name"]+'</td><td id="td_user_name">'+crud_array[crud]["user_name"]+'</td><td id="td_age">'+crud_array[crud]["age"]+'</td><td><center><button class="btn btn-info btn-xs update_btn" data-toggle="modal" data-target="#myModal2" ><span class="glyphicon glyphicon-pencil"></span></button><button class="btn btn-danger btn-xs delete_btn" ><span class="glyphicon glyphicon-trash"></span></button></center></td></tr>';
-                // id ++;
+        if(users.length){
+            for(user in users){
+                user_html += '<tr data-id="'+users[user]["id"]+'">'
+                user_html += '<td>'+users[user]["id"]+'</td>';
+                user_html += '<td>'+users[user]["name"]+'</td>';
+                user_html += '<td>'+users[user]["username"]+'</td>';
+                user_html += '<td>'+users[user]["age"]+'</td>';
+                user_html += '<td>';
+                user_html += '<div class="btn-group">';
+                user_html += '<button class="btn btn-info btn-xs user_edit_btn" data-toggle="modal" data-target="#user_edit_modal" ><span class="glyphicon glyphicon-pencil"></span></button>';
+                user_html += '<button class="btn btn-danger btn-xs user_delete_btn" ><span class="glyphicon glyphicon-trash"></span></button>';
+                user_html += '</div>';
+                user_html += '</td></tr>';
             }
         }
         else{
-            crud_list_html += '<tr><td colspan="5" class="text-center">No Data Available</td></tr>'
+            user_html += '<tr><td colspan="5" class="text-center">No Data Available</td></tr>'
         }
 
-        $("#tbody_id").html(crud_list_html);
+        $("#user_list").html(user_html);
         
     }
 
-    function crud_add(){
-        $("#modal_add_btn").click(function(){
-            var crud_object = {};
-
-                crud_object["id"] = $("#input_id").val();
-                crud_object["name"] = $("#input_name").val();
-                crud_object["user_name"] = $("#input_user_name").val();
-                crud_object["age"] = $("#input_age").val();
-                // console.log(crud_object);
-                
-                if(crud_object["id"] && crud_object["name"] && crud_object["user_name"] && crud_object["age"]){
-                    crud_array.push(crud_object);
-                    // console.log(crud_array)
-                    // id = 1;
-                    crud_list();
-                }
-                else{
-                    alert("Data is Not Completed.")
-                }
-
-                $("#input_id").val("");
-                $("#input_name").val("");
-                $("#input_user_name").val("");
-                $("#input_age").val("");
-                
-        })
-    }
-
-    function crud_update_row(id,name,user_name,age){
-        for(i in crud_array){
-            if(id == crud_array[i]["id"]){
-                crud_array[i]["name"] = name;
-                crud_array[i]["user_name"] = user_name;
-                crud_array[i]["age"] = age;
-                // console.log(crud_array);
-                break;
-            }
+    function get_user_by_id(id){
+        for(i in users){
+            if(users[i]["id"] == id) return users[i];
         }
+        return false;
     }
 
-    function crud_update(){
-        $(".update_btn").click(function(){
-            var crud_update_id = $(this).closest("tr").find("td").first().text();
-            for(i in crud_array){
-                if(crud_update_id == crud_array[i]["id"]){
-                    console.log(crud_update_id);
-                    $("#input_id_2").val(crud_array[i]["id"]);
-                    $("#input_name_2").val(crud_array[i]["name"]);
-                    $("#input_user_name_2").val(crud_array[i]["user_name"]);
-                    $("#input_age_2").val(crud_array[i]["age"]);   
-                    break; 
-                }
-            }    
-        })
-
-        $("#modal_update_btn").click(function(){
-            var crud_update_id = $("#input_id_2").val();
-            var updated_name = $("#input_name_2").val();
-            var updated_user_name = $("#input_user_name_2").val();
-            var updated_age = $("#input_age_2").val();
-            // console.log(crud_update_id);
-            // console.log(updated_name);
-            // console.log(updated_user_name);
-            // console.log(updated_age);
-            crud_update_row(crud_update_id,updated_name,updated_user_name,updated_age);
-            crud_list();
-            $("#input_id_2").val("");
-            $("#input_name_2").val("");
-            $("#input_user_name_2").val("");
-            $("#input_age_2").val("");
-        })
-    }
-
-    function crud_delete_row(del_id){
-        for(i in crud_array){
-            if(del_id == crud_array[i]["id"]){
-                crud_array.splice(i,1);
-                console.log(crud_array);
-            }
+    function get_user_index_by_id(id){
+        for(i in users){
+            if(users[i]["id"] == id) return i;
         }
-        // crud_array.splice(del_id,1);
-        // console.log(crud_array);
+        return -1;
+    }
+
+    function user_add(){
+        $("#user_add_btn").click(function(e){
+            try{
+                var id = $("#add_id").val();
+                var name = $("#add_name").val();
+                var username = $("#add_user_name").val();
+                var age = $("#add_age").val();
+                
+                if($("#user_add_form").valid()){
+                    if(get_user_by_id(id)) throw "This id already exist.";
+
+                    users.push({
+                        id: id,
+                        name: name,
+                        username: username,
+                        age: age
+                    });
+                    user_list();
+
+                    $("#add_id").val("");
+                    $("#add_name").val("");
+                    $("#add_username").val("");
+                    $("#add_age").val("");
+
+                    $("#user_add_modal").modal("hide");
+                }
+            }catch(e){
+                alert(e);
+            }   
+        })
+    }
+
+    function user_edit_modal(){
+        $(document).on("click", ".user_edit_btn", function(e){
+            try{
+                var id = $(this).closest("tr").data("id");
+                var user = get_user_by_id(id);
+                console.log(user);
+                if(!user) throw "User does not exist.";
+
+                $("#edit_id").val(user.id);
+                $("#edit_name").val(user.name);
+                $("#edit_username").val(user.username);
+                $("#edit_age").val(user.age);                
+            }catch(e){
+                alert(e);
+            }   
+        })
+    }
+
+    function user_edit(){
+        $(document).on("click", "#user_edit_btn", function(e){
+            try{
+                var id = $("#edit_id").val();
+                var name = $("#edit_name").val();
+                var username = $("#edit_user_name").val();
+                var age = $("#edit_age").val();
+                
+                if($("#user_edit_form").valid()){
+                    var user = get_user_by_id(id);
+                    var user_index = get_user_index_by_id(id);
+                    if(!user) throw "User does not exist.";
+
+                    users[user_index]["name"] = $("#edit_name").val();
+                    users[user_index]["username"] = $("#edit_username").val();
+                    users[user_index]["age"] = $("#edit_age").val();
+                    user_list();
+
+                    $("#edit_id").val("");
+                    $("#edit_name").val("");
+                    $("#edit_username").val("");
+                    $("#edit_age").val("");
+
+                    $("#user_edit_modal").modal("hide");
+                }
+            }catch(e){
+                alert(e);
+            }   
+        })
     }
     
-    function crud_delete(){
-        $(document).on("click",".delete_btn",function(){
-            var isConfirm = confirm("Do You Want TO Move In Trash ?");
+    function user_delete(){
+        $(document).on("click",".user_delete_btn",function(){
+            var is_confirm = confirm("Do you really want to delete?");
 
-            if(isConfirm){
-                var del_id =  $(this).closest("tr").find("td").first().text();
-                // console.log(del_id);
-                crud_delete_row(del_id);
-                // id = 1;
-                crud_list();
+            if(is_confirm){
+                var id = $(this).closest("tr").data("id");
+                var user_index = get_user_index_by_id(id);
+                console.log(user_index);
+                if(user_index == -1) throw "User does not exist.";
+
+                users.splice(user_index,1);
+                user_list();
             }
         })
     }
 
-    function crud_search(){
-        var search_input_value;
-        // console.log(search_input_value);
-
+    function user_search(){
         $("#search_input").keyup(function(e){
-            e.preventDefault();
-            if(e.keyCode === 13){
-                search_input_value = $(this).val();
-                console.log(search_input_value);
+            var search_input = $(this).val();
+
+            var tr = $("#user_list").find("tr");
+            
+            for(i=0; i<tr.length; i++) {
+                var name = tr.eq(i).find("td")[1].innerText;
+                var username = tr.eq(i).find("td")[2].innerText;
+                var age = tr.eq(i).find("td")[3].innerText;
+
+                if(name.toUpperCase().indexOf(search_input.toUpperCase()) > -1 || username.toUpperCase().indexOf(search_input.toUpperCase()) > -1 || age.toUpperCase().indexOf(search_input.toUpperCase()) > -1){
+                    tr.eq(i).show();
+                }else{
+                    tr.eq(i).hide();
+                }
             }
         })
     }
 
 
     function init(){
-        crud_list();
-        crud_add();
-        crud_update();
-        crud_delete();
-        crud_search();
+        user_list();
+        user_add();
+        user_edit_modal();
+        user_edit();
+        user_delete();
+        user_search();
     }
     
     init();
